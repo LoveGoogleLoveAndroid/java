@@ -1,13 +1,17 @@
 # java
 java basic.
 
-`《Java核心技术》笔记`
+`《Java核心技术卷一》笔记`
 
 
+  
+    
+      
+      
 ## Java关键术语：
-简单性（语法是C++的纯净版本，无头文件、指针、结构、联合、操作符重载、虚基类）、、面向对象、网络技能、健壮性、安全性、可移植性、解释性、高性能、多线程
+简单性（语法是C++的纯净版本，无头文件、指针、结构、联合、操作符重载、虚基类）、面向对象、网络技能、健壮性、安全性、可移植性、解释性、高性能、多线程
 源代码的文件名必须与公有类的名字相同  
-Java所有的方法必须是某个类的方法，包括main函数。  
+Java所有的方法必须是某个类的方法，包括main函数  
  
 ## 注释：
 比C++多了文档注释/**   */  
@@ -23,8 +27,8 @@ java中不做区分
 String greeting = “hello”;         // greeting更像是C++里面的指向常量的指针
 greeting = greeting.substring(0, 3) + “p!”   // help!  
 ```
-String为不可变字串，实际将greeting 指向另一个字符串，意味着堆中有两个字符串”hello”和”help!”；字符串+连接像是C++里面对String重载了+操作符
-优点：编译器可以让字符串共享；Java设计者认为共享带来的高效率远胜提取，拼接字符串带来的低效率；可以用StringBuilder防止既耗时又费空间的链接操作
+String为不可变字串，实际将greeting 指向另一个字符串，意味着堆中有两个字符串”hello”和”help!”；字符串+连接像是C++里面对String重载了+操作符  
+优点：编译器可以让字符串共享；Java设计者认为共享带来的高效率远胜提取、拼接字符串带来的低效率；可以用StringBuilder防止既耗时又费空间的链接操作
 ```
 StringBuilder builder = new StringBuilder();
 builder.append(ch);
@@ -50,7 +54,7 @@ Label:
  
 for( variable:collection ) statement;
 ```
-collection必须是一个数据或者是实现了Iterable接口的类对象（如ArrayList）
+collection必须是一个数组或者是实现了Iterable接口的类对象（如ArrayList）
  
  
 ## 类之间关系：
@@ -136,10 +140,15 @@ Java不支持，但可以为任何类添加finalize方法，在垃圾回收清�
 如何没有制定任何访问修饰符，则默认为包作用域，可被包中所有方法访问  
  
 ## 类的定义格式：
-* public部分 2：包作用域部分 3：private部分
+* public部分 
+* 包作用域部分 
+* private部分
 
 ## 每个部分定义顺序：
-* 实例方法 2：静态方法 3：实例域 4：静态域
+* 实例方法 
+* 静态方法 
+* 实例域 
+* 静态域
  
 ## 多重继承：
 Java用extends关键字代替了C++的:；而且跟C++不同，Java中不支持多重继承，而且所有的继承都是public继承  
@@ -150,7 +159,7 @@ Java用extends关键字代替了C++的:；而且跟C++不同，Java中不支持�
 3. 静态绑定的方法：private方法、static方法、final方法和构造器，因为编译器可以准确的知道调用的是哪个方法
 4. final类（其中的方法自动为final，但不包括域）可阻止继承，final方法可阻止覆盖
 
-C++中没有阻止覆盖的方法，阻止继承的技巧：
+C++中没有阻止覆盖的方法，但是有阻止继承的技巧  
  
 ## 强制类型转换：
 1. 唯一原因是在暂时忽略了对象的实际类型后可以使用对象的全部功能
@@ -190,21 +199,24 @@ public boolean equals( Object otherobj )
  
 ## 对象包装器：
 所有的基本类型都有一个与之对应的类，这些类称为包装器  
-Integer Long Float Double Short Byte Character Void Boolean（前六个派生于Number）,对象包装器是不可变的，还是final，因此不能定义它们的子类，尖括号内的不允许是基本类型  
-ArraryList<Integer> list = new ArrayList<Integer>();
-ArrayList<Integer>的效率要远低于int[]数组，适合构造小型集合，程序猿操作的方便性要比执行效率更加重要  
+Integer Long Float Double Short Byte Character Void Boolean（前六个派生于Number）,对象包装器是不可变的，还是final，因此不能定义它们的子类，尖括号内的不允许是基本类型  
+`ArraryList<Integer> list = new ArrayList<Integer>();`  
+ArrayList<Integer>的效率要远低于int[]数组，适合构造小型集合，程序猿操作的方便性要比执行效率更加重要  
 
 ## 自动打包：
-list.add(3)将自动变换为list.add(new Integer(3));  
+`list.add(3)`将自动变换为`list.add(new Integer(3));`  
 ## 自动拆包：
-int n = list.get(3)将自动变换为int n = list.get(3).intValue();  
+`int n = list.get(3)`将自动变换为`int n = list.get(3).intValue();`  
 ## 字符串转为整型：
 ```
 int x = Integer.parseInt(s);
 Integer y = Integer.valueOf(s);
+int z = Integer.valueOf(s).initValue();
 ``` 
 ## 整型转为字符串：
 ```
-String s = Integer.
+String s = String.valueOf(i);
+String s = Integer.toString(i);
+String s = "" + i;
 ``` 
 修改参数值的方法：使用IntHolder、BooleanHolder等
