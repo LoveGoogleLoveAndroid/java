@@ -220,3 +220,320 @@ String s = Integer.toString(i);
 String s = "" + i;
 ``` 
 修改参数值的方法：使用IntHolder、BooleanHolder等
+
+## 反射：
+1. 在程序运行期间，Java运行时系统始终为所有的对象维护一个被称为运行时的类型标识，这个信息保存着每个对象所属的类足迹，保存这些信息的类被称为Class
+2. 
+```
+a：Employee e;
+Class cl = e.getClass()
+b：String className = “java.util.Date”;
+Class cl = Class.forName(className);
+c：Class cl = Date.class;          // int.Class; Double[].Class
+```
+3. 反射很脆弱，编译器很难帮助人们发现程序中的错误，任何错误只能在运行时被发现
+4. java.lang.reflect有三个类，Field、Method、Constructor
+getFields、getMethods、getConstructors分别返回类提供的public域、方法和构造器，
+其中包括超类的公有成员
+getDeclareFields、getDeclareMethods、getDeclareConstructors分别返回类提供的public域、方法和构造器，其中包括私有和受保护的成员，但不包括超类的成员  
+`getModifiers`：返回描述构造器、方法或域的修饰符
+`getName`：返回构造器、方法或域的名字
+`getParametertypes`：构造器和方法参数列表
+`getRetureType`：方法返回类型
+ 
+## 接口：
+1. 所有方法默认为public（所以实现接口时必须声明为public），所有域默认为public static final
+2. 接口不是类，不能实例化，但是可以声明接口的变量
+```
+x = new Comparable(…); //error
+Comparable x;          //ok
+```
+3. 接口可以被扩展（继承）
+```
+public interface Moveable
+{
+         void move(double x, double y);
+}
+public interface Powered extends Moveable
+{
+         double milesPerGallon();
+}
+```
+4. 标记接口：Cloneable、Serializable、RandomAccess、Remote，其唯一目的是可以用instanceof 进行类型检查
+5. 在任何使用C++函数指针的地方，都应该考虑使用Java中的接口
+```
+public interface Comparable<T>
+{
+         int compareTo(T other);
+}
+```
+
+## 对象克隆：
+1. Object默认的clone方法，只能将各个域进行相应的拷贝
+2. 如果类中仅含有基本数据类型和不可变对象引用，则浅拷贝不会产生任何问题，如果类中存在可变的对象引用，则必须重新定义clone方法，以便实现深拷贝
+3. 默认的clone方法是否满足要求？默认的clone方法是否能够通过调用可变对象的clone得到修补？是否不应该使用clone？
+4. 即使clone的默认实现即浅拷贝可以满足要求，也应该实现Cloneable接口，将clone方法定义为public，并调用super.clone()
+5. 所有的数组类型包含一个public的clone方法
+```
+int[] luckyNumber = {1, 3, 5, 7, 9};
+int[] clone = (int[])luckyNumber.clone();
+```
+
+## 内部类：
+1. 内部类可以访问该类定义作用域中的数据，包括私有；可以对同一个包中其他类实现隐藏；当想定义一个回调函数且不想编写大量代码，使用匿名内部类；内部类类似于C++的嵌套类
+2. 编译器会为内部类生成一个默认的构造器（传一个外部类对象引用的参数），以把内部类和其外部类连接起来
+3. 内部类可以是私有类，常规类只可以是包可见或public
+4. 如果内部类只使用一次，则可将其定义在方法内，形成局部类，对外部世界完全隐藏；不能用public或private修饰，其作用域仅在方法内；可以访问局部变量，但只能是final，如果要在内部类更新某个数据，可以考虑定义只有一个数据的数组，如
+`final int[] counter = new int[1];  `        // counter是对象引用，不可引起地方对象，但其所引用的对象counter[0]可以设置
+5. 如果只创建这个类的一个对象，则无需命名了，可定义为匿名内部类，构造器名必须与类名相同，所以匿名内部类没有构造器
+```
+new SuperType( construction parameters )
+{
+         inner class methods and data
+}
+```
+SuperType可以是接口，也可以是一个类  
+6. 有时候使用内部类只是为了把一个类隐藏在另一个类的内部，并不需要内部类引用外围类对象，可以将内部类定义为static静态内部类，以便取消产生的引用
+7. 定义在接口中的内部类自动为static和public
+ 
+## 异常分类：
+Throwable:：Error（系统内部错误和资源耗尽，应终止程序）和Exception
+Exception：RuntimeException（程序错误导致的，一定是你的问题，如错误的类型转换，数组越界，空指针等）和IOException
+`Error和RuntimeException`称为未检查异常，其他为已检查异常；程序应该声明所有尽可能的已检查异常，而未检查异常要么不可控（Error），要么就应该避免发生（RuntimeException）  
+Java中，只能抛出Throwable子类的对象，而C++可以抛出任何类型的值
+ 
+## 捕获异常：
+如果在try中任何代码抛出一个在catch说明的异常类，那么：  
+1. 程序将跳过try语句块的其余代码
+2. 执行catch的代码
+如果在try没有抛出异常，则跳过catch代码  
+如果抛出没有在catch声明的异常，则退出方法  
+应该捕获那些知道如何处理的异常，不知道如何处理，应该将其传递出去，在方法的首部添加一个throws说明符，以便告知方法可能会抛出异常
+可以在catch中继续抛出异常，这么做的目的是改变异常的类型  
+Java中没有析构器，需要手工回收代码，写入finally子句  
+```
+InputStream in = …
+try
+{
+       try
+       {
+                   code that might throw exception
+         }
+         finally
+         {
+                   in.close();
+        }
+}
+catch ( IOException e)
+{
+         show error dialog
+}
+``` 
+ 
+## 断言：
+允许在测试期间向代码插入一些检查语句，当代码发布时，这些语句会被移除  
+```
+assert condition;
+or
+assert condition : expression
+```
+若结果为false，则抛出AssertionError异常  
+
+## Java三种处理系统错误的机制：
+异常、日志、断言  
+断言失败是致命的，不可恢复的错误，是在测试阶段调试的战术性工具，日志记录是在程序的整个声明周期都可以使用的策略性工具
+ 
+## 泛型：
+使用泛型机制编写的代码要比那些杂乱的使用Object变量，然后再进行强制类型转换的代码具有更好的安全性和可读性  
+Java的泛型类类似于C++的模版类，只是没有专用的template关键字  
+ 
+## 类型变量：
+```
+public static Pair<String> minmax(String[] a)
+{
+         if ( a == null || a.length == 0 )  return null;   
+         String min = a[0]; max = a[0]; 
+         for (int i=0; i<a.length; i++)
+         {
+                   if ( min.compareTo(a[i]) > 0 ) min = a[i];
+                   if ( max.compareTo(a[i]) < 0 ) max = a[i];
+         }
+         
+        return new Pair<String>(min, max);
+}
+```
+
+## 类型变量限定：
+```
+public static <T> T min(T[] a)
+{
+         if (a == null || a.length == 0)  return null;
+         T small = a[0];
+         for (int i=0; i<a.length; i++)
+         {
+                   if (small.compareTo(a[i]) > 0) small = a[i];
+         }
+         return small;
+}
+public static <T extends Comparable> T min(T[] a)….
+```
+限定中最多有一个类，可以有多个接口：`T extends Comparable & Serializable`  
+无论何时定义一个泛型类型，都会自动提供一个相应的原始类型，是删去类型参数后的泛型类型名，用第一个限定的类型变量来替换，如果没有限定就用Object替换  
+C++中不能对模版参数的类型加以限制，每个模版实例化产生不同的类型，这一现象称为“模块代码膨胀”，Java中不存在这个问题  
+ 
+## 约束与局限性
+1. 不能用类型参数代替基本类型，没有Pair<double>，只有Pair<Double>
+2. 运行时类型查询只适用于原始类型
+3. 不能抛出或捕获泛型类实例，不能在catch中使用类型变量，但可以在异常声明中使用
+4. 参数化类型的数组不合法， Pair<String>[] table = new Pair<String>[10]; ERROR
+5. 不能实例化类型变量，不能使用new T(…)，new T[…]或T.clsss；Class类是泛型的，如String.class实际上是一个Class<String>类的对象，事实上也是唯一的对象
+6. 不能在静态域或方法中引用类型变量
+ 
+## 泛型类型的继承规则：
+无论S和T是什么关系，通常，Pair\<S\>与Pair\<T\>没有什么联系  
+```
+Pair<Manager> managerBuddies = new Pair<Manager>(ceo, cfo);
+Pair<Employee> employeeBuddies = managerBuddies; // illegal;
+ 
+Manger[] managerBuddies = {ceo, cfo};
+Employee[]employeeBuddies = managerBuddies; // ok
+```  
+
+## 通配符类型：
+固定的泛型类型系统使用起来并没有那么令人愉快  
+`Pair< ? extends Employee> `              // Employee是?的上界
+表示任何泛型的Pair类型，其类型参数是Employee的子类，如Pair<Manager>，而不是Pair<String>
+ 
+## 通配符限定：
+```
+Pair<? super Manager>            // Manager是?的下界
+ 
+public interface Comparable<T>
+{
+         public int compareTo(T other);
+}
+public static <T extends Comparable< ? super T>>  T min(T[] a)  // 看起来很吓人
+```
+
+## 集合类：
+是带有类型参数的泛型类，不允许有重复的对象  
+``` 
+public interface Collection<E>
+{
+         boolean add( E element );        // 集合变化返回true，否则返回false
+         Iterator<E> iterator();
+        
+         int size();
+         boolean contains( Object obj );
+         boolean equals( Object other );
+         boolean remove( Object obj );
+…
+}
+ 
+public interface Iterator<E>
+{
+         E next();
+         boolean hasNext();
+         void remove();
+}
+ 
+Collection<String> c = …;
+Iterator<String> iter = c.iterator();
+for ( String element : c )   // foreach可以与任何实现了Iterable接口的对象一起工作
+{       
+}
+public interface Iterable<E>
+{
+         Iterator<E> iterator();
+}
+ 
+Collection<String> c = …;
+Iterator<String> iter = c.iterator();
+iter.next();        // skip over the first element
+iter.remove();  // now remove it
+remove之前必须调用next方法，否则抛出IllegalStateException异常
+```
+
+## 链表：
+Java中的链表都是双向链表，有序集合  
+LinkedList：任何位置高效插入删除的有序序列  
+```
+List<String> staff = new LinkedList<String>();  
+staff.add(“Amry”);
+staff.add(“Bob”);
+staff.add(“Carl”);
+Iterator iter = staff.iterator();          // Iterator中没有提供add方法
+String first = iter.next();            // visit the first element
+String second = iter.next();      // visit the second element
+iter.remove();           //      remove the second element
+ 
+interface ListIterator<E> extends Iterator<E>
+{
+         void add( E element );      // 与Collection.add不同，它假定总会改变链表
+         void set( E element );
+         boolean hasPrevious();
+         …
+}
+ 
+ListIterator<String> iter = staff.listIterator();
+iter.next();        // skip past the first element
+iter.add(“Juliet”)                // Amry->Juliet->Bob->Carl
+ 
+ListIterator<String> iter = staff.listIterator();
+String old = iter.next();     // return the first element
+iter.set(netValue);            // sets first element
+```
+若有两个迭代器，一个更改，另一个遍历，则会出错  
+ 
+不应该使用这种让人误解的随机访问方法来遍历链表：  
+```
+for (int i=0; i<list.size(); i++)
+{
+         do something with list.get(i);
+}
+```
+
+## 数组列表：
+`ArrayList`：动态增长或缩减的索引序列，封装了一个动态再分配的对象数组；非线程安全  
+`Vector`：所有方法都是同步的，线程同步操作将会耗费大量的时间
+ 
+## 散列集：
+Java中的散列集通过链表数组实现  
+`set`：没有重复元素的集合  
+`HashSet`：  
+```
+Set<String> words = new HashSet<String>();
+words.add(“Hello”);
+words.add(“world!”);
+ 
+Iterator<String> iter = words.iterator();
+String first = iter.next();
+``` 
+
+`TreeSet`：树集是有序集合  
+```
+SortedSet<String> sorter = new TreeSet<String>();
+sorter.add(“Bob”);
+sorter.add(“Army”);
+sorter.add(“Carl”);
+for (String s : sorter)       System.out.println(s);      // 自动排序 Army->Bob->Carl
+```
+
+`Linked 改快读慢；Array 读快改慢；Hash 两都之间`
+ 
+`Collection是集合接口`  
+    |————`Set子接口`：无序，不允许重复  
+    |————`List子接口`：有序，可以有重复元素  
+    `Set`：检索元素效率低下，删除和插入效率高，插入和删除不会引起元素位置改变  
+    `List`：和数组类似，List可以动态增长，查找元素效率高，插入删除元素效率低，因为会引起其他元素位置改变  
+`Set和List具体子类`  
+    `Set`  
+     |————`HashSet`：以哈希表的形式存放元素，插入删除速度很快  
+|————`TreeSet`：红黑树  
+    `List`  
+     |————`ArrayList`：动态数组  
+     |————`LinkedList`：链表、队列、堆栈  
+    `Vector`是一种老的动态数组，是线程同步，效率很低，一般不赞成使用  
+ 
+`Iterator`：只能正向遍历集合，适用于获取移除元素  
+`ListIerator`：继承Iterator，可以双向列表的遍历，同样支持元素的修改
