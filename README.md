@@ -232,14 +232,14 @@ Class cl = Class.forName(className);
 c：Class cl = Date.class;          // int.Class; Double[].Class
 ```
 3. 反射很脆弱，编译器很难帮助人们发现程序中的错误，任何错误只能在运行时被发现
-4. java.lang.reflect有三个类，Field、Method、Constructor
-getFields、getMethods、getConstructors分别返回类提供的public域、方法和构造器，
+4. java.lang.reflect有三个类，`Field、Method、Constructor
+getFields、getMethods、getConstructors`分别返回类提供的public域、方法和构造器，
 其中包括超类的公有成员
-getDeclareFields、getDeclareMethods、getDeclareConstructors分别返回类提供的public域、方法和构造器，其中包括私有和受保护的成员，但不包括超类的成员  
-`getModifiers`：返回描述构造器、方法或域的修饰符
-`getName`：返回构造器、方法或域的名字
-`getParametertypes`：构造器和方法参数列表
-`getRetureType`：方法返回类型
+`getDeclareFields、getDeclareMethods、getDeclareConstructors`分别返回类提供的public域、方法和构造器，其中包括私有和受保护的成员，但不包括超类的成员  
+`getModifiers`：返回描述构造器、方法或域的修饰符  
+`getName`：返回构造器、方法或域的名字  
+`getParametertypes`：构造器和方法参数列表  
+`getRetureType`：方法返回类型  
  
 ## 接口：
 1. 所有方法默认为public（所以实现接口时必须声明为public），所有域默认为public static final
@@ -297,8 +297,8 @@ SuperType可以是接口，也可以是一个类
 7. 定义在接口中的内部类自动为static和public
  
 ## 异常分类：
-Throwable:：Error（系统内部错误和资源耗尽，应终止程序）和Exception
-Exception：RuntimeException（程序错误导致的，一定是你的问题，如错误的类型转换，数组越界，空指针等）和IOException
+Throwable:：Error（系统内部错误和资源耗尽，应终止程序）和Exception  
+Exception：RuntimeException（程序错误导致的，一定是你的问题，如错误的类型转换，数组越界，空指针等）和IOException  
 `Error和RuntimeException`称为未检查异常，其他为已检查异常；程序应该声明所有尽可能的已检查异常，而未检查异常要么不可控（Error），要么就应该避免发生（RuntimeException）  
 Java中，只能抛出Throwable子类的对象，而C++可以抛出任何类型的值
  
@@ -340,7 +340,7 @@ assert condition : expression
 若结果为false，则抛出AssertionError异常  
 
 ## Java三种处理系统错误的机制：
-异常、日志、断言  
+`异常、日志、断言 `
 断言失败是致命的，不可恢复的错误，是在测试阶段调试的战术性工具，日志记录是在程序的整个声明周期都可以使用的策略性工具
  
 ## 泛型：
@@ -385,9 +385,9 @@ C++中不能对模版参数的类型加以限制，每个模版实例化产生�
 1. 不能用类型参数代替基本类型，没有Pair<double>，只有Pair<Double>
 2. 运行时类型查询只适用于原始类型
 3. 不能抛出或捕获泛型类实例，不能在catch中使用类型变量，但可以在异常声明中使用
-4. 参数化类型的数组不合法， Pair<String>[] table = new Pair<String>[10]; ERROR
+4. 参数化类型的数组不合法Pair<String>[] table = new Pair<String>[10]; ERROR
 5. 不能实例化类型变量，不能使用new T(…)，new T[…]或T.clsss；Class类是泛型的，如String.class实际上是一个Class<String>类的对象，事实上也是唯一的对象
-6. 不能在静态域或方法中引用类型变量
+6. 不能在静态域或方法中引用类型变量  
  
 ## 泛型类型的继承规则：
 无论S和T是什么关系，通常，Pair\<S\>与Pair\<T\>没有什么联系  
@@ -526,6 +526,7 @@ for (String s : sorter)       System.out.println(s);      // 自动排序 Army->
     |————`List子接口`：有序，可以有重复元素  
     `Set`：检索元素效率低下，删除和插入效率高，插入和删除不会引起元素位置改变  
     `List`：和数组类似，List可以动态增长，查找元素效率高，插入删除元素效率低，因为会引起其他元素位置改变  
+    
 `Set和List具体子类`  
     `Set`  
      |————`HashSet`：以哈希表的形式存放元素，插入删除速度很快  
