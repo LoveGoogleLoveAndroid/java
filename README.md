@@ -538,3 +538,156 @@ for (String s : sorter)       System.out.println(s);      // 自动排序 Army->
  
 `Iterator`：只能正向遍历集合，适用于获取移除元素  
 `ListIerator`：继承Iterator，可以双向列表的遍历，同样支持元素的修改
+
+this should be a table for the difference of above...  
+
+## 线程与进程差别：
+进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动，是系统进行资源分配和调度的一个独立单位  
+线程是进程的一个实体, 是CPU调度和分派的基本单位，它是比进程更小的能独立运行的基本单位，线程自己基本上不拥有系统资源，只拥有一点在运行中必不可少的资源(如程序计数器，一组寄存器和栈)，但是它可与同属一个进程的其他的线程共享进程所拥有的全部资源  
+进程和线程的主要差别在于它们是不同的操作系统资源管理方式：进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程  
+进程只能在一个时间干一件事，如果想同时干两件事或多件事，进程就无能为力了，进程在执行的过程中如果阻塞，例如等待输入，整个进程就会挂起，即使进程中有些工作不依赖于输入的数据，也将无法执行  
+因为要并发，发明了进程，又进一步发明了线程；只不过进程和线程的并发层次不同：进程属于在处理器这一层上提供的抽象；线程则属于在进程这个层次上再提供了一层并发的抽象。如果我们进入计算机体系结构里，就会发现，流水线提供的也是一种并发，不过是指令级的并发。这样，流水线、线程、进程就从低到高在三个层次上提供我们所迫切需要的并发；不要调用Thread或者Runnable对象的run方法；直接调用run方法，只会执行同一线程中的任务，而不会启动新线程  
+``` 
+void interrupt();        // 向线程发送中断请求，线程的中断状态被设置为true，如果线程目前被sleep调用阻塞，InterruptedException异常抛出
+static boolean interrupted();   // 测试当前线程（执行此语句的线程）是否被中断，并将线程中断状态重置为false
+boolean isInterrupted();           // 测试当前线程（执行此语句的线程）是否被中断
+static Thread currentThread();        // 返回当前执行线程的Thread对象
+void join;  // 等待终止指定的线程
+void stop();                // 过时
+void suspend();         // 过时
+void resume();          // 过时
+```
+
+## 线程状态：
+```
+New：创建一个线程如new Thread()
+Runnable：开始一个线程如thread.start()，可能运行，也可能没有运行，处于可运行状态
+Blocked：当一个线程试图获取一个内部的对象锁，而该锁被其他线程持有则进入阻塞状态
+Waiting：当一个线程等待另一个线程通知调度器一个条件时，进入等待状态
+Timed waiting：计时等待
+Terminated：run方法正常退出或没有捕获的异常终止了run方法而意外死亡
+```
+
+## 守护线程：
+`thread.SetDaemon();       // 唯一用途是为其他线程提供服务`  
+如果只剩下守护线程，就没必要运行程序了，守护线程应该永远不访问固有资源，如文件数据库，它会在任何时候甚至在一个操作的中间发生中断  
+ 
+## 重入锁：
+重入锁（ReentrantLock）是一种递归无阻塞的同步机制，它不是synchronized的简单替代，看起来 ReentrantLock 无论在哪方面都比 synchronized 好；所有 synchronized 能做的，它都能做，它拥有与synchronized 相同的内存和并发性语义，还拥有 synchronized 所没有的特性，在负荷下还拥有更好的性能；一般来说，除非您对 Lock 的某个高级特性有明确的需要，或者有明确的证据（而不是仅仅是怀疑）表明在特定情况下，同步已经成为可伸缩性的瓶颈，否则还是应当继续使用 synchronized；synchronized 仍然有一些优势，比如在使用 synchronized 的时候，不能忘记释放锁；在退出 synchronized 块时，JVM 会为您做这件事。您很容易忘记用 finally 块释放锁，这对程序非常有害，您的程序能够通过测试，但会在实际工作中出现死锁，那时会很难指出原因；另一个原因是当 JVM 用 synchronized 管理锁定请求和释放时，JVM 在生成线程转储时能够包括锁定信息，这些对调试非常有价值，因为它们能标识死锁或者其他异常行为的来源，而Lock 类只是普通的类，JVM 不知道具体哪个线程拥有 Lock对象；在确实需要一些 synchronized 所没有的特性的时候，比如时间锁等候、可中断锁等候、无块结构锁、多个条件变量或者锁投票可以使用重入锁  
+解锁操作必须放在finally内，如果在临界区的代码抛出异常，锁必须被释放；必须留心临界区的代码，不要因为异常的抛出而跳出了临界区这样finally虽然执行，但是对象可能处于一种受损状态  
+```
+public void transfer( int from, int to, int amount )
+{
+         bankLock.lock();
+         try
+         {
+                   accounts[from] -= amount;
+                   accounts[to] += amount;         
+         }
+         finally
+         {
+                   bankLock.unlock();
+         }
+}
+…
+private Lock bankLock = new ReentrantLock  // implements the Lock interface
+```
+
+## 条件对象：
+通常，线程进入临界区，却发现在某一条件满足后才能执行，要使用一个条件对象来管理那些已经获得一个锁却不能做有用工作的线程  
+```
+if ( bank.getBalance(from) >= amount)
+         bank.transfer( from, to, amount )   // thread might be deactivated at this point
+ 
+ 
+public void transfer( int from, int to, int amount )
+{
+         bankLock.lock();
+         try
+         {
+                   while ( accounts[from] < amount )
+                            sufficientFunds.await();           // block current thread, unlock() current thread
+                   accounts[from] -= amount;
+                   accounts[to] += amount;         
+ 
+                   sufficientFunds.signalAll();       // 解除等待线程的阻塞
+         }
+         finally
+         {
+                   bankLock.unlock();
+         }
+}
+…
+private Condition sufficientFunds = bankLock.newCondition();
+```
+当一个线程拥有在某个条件的锁时，它仅仅可以调用await（当一个线程调用await，没有办法重新激活自身，只能寄希望于其他线程）、signalAll或signal（随机解除等待集中某个线程的阻塞状态，如果该线程不能运行，将再次阻塞，如果没有其他线程再次调用signal，系统就会死锁）  
+* 锁可以保护代码片段，任何时刻只能有一个线程执行被保护的代码
+* 锁可以管理试图进入被保护代码段的线程
+* 锁可以拥有一个或多个相关的条件对象
+每个条件对象管理那些已经进入被保护的代码段但是还不能运行的线程  
+ 
+## synchronized：
+Java为每个对象提供一个内部锁，如果一个方法用synchronized关键字声明，那么对象的锁将保护整个方法  
+```
+public synchronized void method()
+{
+}
+```
+等价于：
+```
+public void method()
+{
+         this.intrinsickLock.lock();
+         try
+         {
+                   …
+         }
+         finally
+         {
+                   this.intrinsicLock.unlock();
+         }
+}
+```
+内部对象锁只有一个相关条件  
+```
+public synchronized void transfer( int from, int to, int amount )
+{
+                   while ( accounts[from] < amount )
+                            wait();               // 等价于sufficientFunds.await();
+                   accounts[from] -= amount;
+                   accounts[to] += amount;         
+ 
+                   notifylAll();        // 等价于sufficientFunds.signalAll();
+}
+```
+* 内部锁不能中断一个正在试图获得锁的线程
+* 内部锁不能设定超时
+* 内部锁仅有单一条件，可能不够
+最好既不用`Lock/Condition`也不用`synchronized`关键字，许多情况下可以用`java.util.concurrent`  
+ 
+## 同步阻塞：
+lock对象对创建仅仅用来使用每个Java对象持有的锁  
+```
+public void transfer( int from, int to, int amount )
+{
+         synchronized ( lock )
+         {
+                   accounts[from] -= amount;
+                   accounts[to] += amount;         
+         }
+}
+…
+private Object lock = new Object();
+```
+
+## Volatile：
+仅仅为了读写一个或两个实例域就进行同步，开销过大  
+Java 语言提供了一种稍弱的同步机制，即 volatil，用来确保将变量的更新操作通知到其他线程，保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新；当把变量声明为volatile类型后，编译器与运行时都会注意到这个变量是共享的，volatile关键字为实例域的同步访问提供了一种免锁机制，如果声明为volatile，那么编译器和虚拟机就知道是可能被另一个线程并发更新  
+如果实例域是final或volatile，或对域的访问由公有的锁进行保护，则域的并发访问是安全的  
+volatile不能提供原子性，也并非线程安全  
+```
+public void filpDone()
+{
+         done = !done;  // cannot modify for sure
+}
+```
