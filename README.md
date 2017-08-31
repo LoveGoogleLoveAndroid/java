@@ -691,3 +691,185 @@ public void filpDone()
          done = !done;  // cannot modify for sure
 }
 ```
+
+
+## 死锁：
+两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待的现象，若无外力作用，它们都将无法推进下去  
+死锁原因：  
+* 系统资源不足
+* 进程运行推进的顺序不合适
+* 资源分配不当
+死锁条件：  
+* 互斥条件：进程在某一时间内独占资源
+* 请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放
+* 不剥夺条件：进程已获得资源，在末使用完之前，不能强行剥夺
+* 循环等待条件：若干进程之间形成一种头尾相接的循环等待资源关系
+预防死锁：  
+通过设置某些限制条件，去破坏产生死锁的四个必要条件中的一个或者几个，来预防发生死锁，预防死锁是一种较易实现的方法，但是由于所施加的限制条件往往太严格，可能会导致系统资源利用率和系统吞吐量降低    
+避免死锁：  
+该方法同样是属于事先预防的策略，但它并不须事先采取各种限制措施去破坏产生死锁的的四个必要条件，而是在资源的动态分配过程中，用某种方法去防止系统进入不安全状态，从而避免发生死锁  
+锁测试与超时：  
+线程在调用lock方法获得另一个线程所持有的锁的时候，很可能发生阻塞，应该谨慎的申请锁；lock方法不能被中断，如果一个线程在等待获得一个锁时被中断，中断线程在获得锁前一直处于阻塞状态，如果出现死锁，那么，lock方法将无法终止；如果调用带有超时参数的trylock，如果线程在等待期间被中断，将抛出InterruptedException异常，允许程序打断死锁；如果一个线程被另一个线程通过调用signalAll或signal激活，或者超时时限已到，或者线程被中断，那么await方法将返回  
+## 读写锁：
+如果很多线程从一个数据结构读取数据而很少线程修改其中数据，可允许对读者线程共享访问，对写者线程互斥访问
+```
+private ReetrantReadWriteLock rwl = new ReetrantReadWriteLock();
+private Lock readLock = rwl.readLock();
+private Lock writeLock = rwl.writeLock();
+```
+为什么弃用stop和suspend方法：  
+stop和suspend有个共同点：都试图控制一个给定线程的行为；stop天生就不安全，经验证明经常导致死锁，它用来终止未结束的方法，如run方法，线程被终止，立即释放被它锁住的对象的锁，导致对象处于不一致状态，当线程要终止另一个线程时，无法知道什么时候调用stop是安全的，什么时候会导致对象被破坏；suspend不会破坏对象，但是，如果用suspend挂起一个持有一个锁的线程，那么该锁在恢复之前不可用，如果调用suspend方法的线程试图获得同一个锁，那么程序死锁，被挂起的线程等着被恢复，而将其挂起的线程等待获得锁  
+## 阻塞队列：
+对于许多线程问题，可以通过使用一个或多个队列以优雅且安全的方式将其形式化；生产者线程向队列插入元素，消费者线程则取出它们；使用队列，可以安全的从一个线程向另一个线程传递数据；当试图向队列添加元素而队列已满，或是想从队列移除元素而队列为空的时候，阻塞队列导致线程阻塞；在协调多个线程之间的合作时，阻塞队列是一个有用的工具；工作者线程可以周期性的将中间结果存储在阻塞队列，而其他的工作者线程移出中间结果并进一步加以修改，队列会自动的平衡负载  
+```
+add()         队列满则抛出IllegalStateException异常
+remove()  移出并返回对头元素，队列空则抛出NoSuchElementException异常
+element()  返回对头元素，队列空则抛出NoSuchElementException异常
+offer()  添加一个元素，如果队列满则返回false
+peek()  返回对头元素，如果队列空则返回null
+poll()   移除并返回对头元素，如果队列空则返回null
+put()   添加一个元素，如果队列满，则阻塞
+take()  移除并返回对头元素，如果队列空，则阻塞
+LinkedBlockingQueue：链表，容量无上界
+LinkedBlockingDeque：链表，双端队列
+ArrayBlockingQueue：数组，需要指定容量
+PriorityBlockingQueue：链表，优先级队列
+```
+
+## 高效的散列、集合和队列：
+`ConcurrentHashMap、ConcurrentSipListMap、ConcurrentSkipListSet、ConcurrentLinkedQueue`  
+这些集合使用复杂的算法，通过允许并发的访问数据结构的不同部分来使竞争最小化  
+Vector和Hashtable类提供了线程安全的动态数组和散列表的实现，被ArrayList和HashMap取而代之，这些类不是线程安全的，可以通过同步包装器变成线程安全的  
+## Callable和Future：
+创建线程的2种方式，一种是直接继承Thread，另外一种就是实现Runnable接口；这2种方式都有一个缺陷就是：在执行完任务之后无法获取执行结果；如果需要获取执行结果，就必须通过共享变量或者使用线程通信的方式来达到效果，这样使用起来就比较麻烦；自从Java 1.5开始，就提供了Callable和Future，通过它们可以在任务执行完毕之后得到任务执行结果  
+Runnable封装了一个异步执行的任务，可以把它想象成为一个没有参数和返回值的异步方法；Callable与Runnable类似，但是有返回值，只有一个方法：  
+```
+public interface Callable<V>
+{
+         V call()  throws Exception;
+}
+```
+Future保存异步计算的结果，可以启动一个计算，将Future对象交给某个线程，然后忘了它；Future对象的所有者在结果计算好之后可以获得它  
+```
+public interface Future<V>
+{
+         V get() throws…; // 调用被阻塞，直到计算完成
+         V get( long timeout, TimeUnit unit ) throws…; //
+         void cancel( Boolean mayInterrupt ); //
+         boolean isCanceled();      //
+         Boolean isDone();    // 计算完成后返回true
+}
+```
+FutureTask包装器是一种非常便利的机制，可以将Callable转换为Future和Runnable  
+```
+Callable<Integer> myConputation = …;
+FutureTask<Integer> task = new FutureTask<Integer>(myConputation);
+Thread t = new Thread(task);           // it’s Runnable
+t.start();
+…
+Integer result = task.get();      // it’s Future
+```
+## 线程池：
+创建一个新的线程要涉及到与操作系统的交互，有一定代价；如果程序中创建了大量生命期很短的线程，应该使用线程池；一个线程池中包含许多准备运行的空闲线程，将Runnable对象交给线程池，就会有一个线程调用run方法，当run退出时，线程不会死亡，而是在池中准备为下一个请求服务；另一个使用线程池的理由是减少并发线程的数目  
+```
+newCachedThreadPool   必要时创建线程，空闲线程保留60s
+newFixedThreadPool        固定数量线程，一直保留
+newScheduledThreadpoll         用于预定执行而构建的线程池，替换timer
+newSingleThreadExecutor       只有一个线程的池，顺序执行每个提交任务
+newSingleThreadScheduledExecutor       用于预定执行而构建的单线程池
+```
+它们返回实现了ExecutorService接口的ThreadPoolExecutor类的对象  
+```
+Future<?> submit( Runnable task )
+Future<T> submit( Runnable task, T result )
+Future<T> submit( Callable<T> task )
+```
+当用完一个线程池的时候，调用shutdown，启动该线程池的关闭序列，不再接受新的任务，当所有任务都完成后，线程池的线程死亡  
+使用线程池应该做的事：  
+调用Executors类中的静态方法newCachedThreadPool或newFixedThreadPool  
+调用submit提交Runnable或Callable  
+如果想取消一个任务，或如果提交Callable对象，就要保存好返回的Future对象  
+当不再提交任何任务时，调用shutdown  
+## 信号量：
+Semaphore：允许线程集等待直到被允许继续运行为止，限制资源的访问总数，如果许可数是1，常常阻塞线程直到另一个线程给出许可为止  
+建议在信号量的行为能适合你面对的同步问题时才能使用它，否则会陷入到思维的混乱  
+## 倒计时门栓：
+CountDownLatch：允许线程集等待直到计数减为0，当一个或多个线程需要等待直到指定数目的事件发生  
+```
+public class CountDownLatchTest {
+    // 模拟100米赛跑，10名选手已经准备就绪，只等裁判一声令下。当所有人都到达终点时比赛结束
+    public static void main(String[] args) throws InterruptedException {      
+        final CountDownLatch begin = new CountDownLatch(1);  // 开始的倒数锁  
+        final CountDownLatch end = new CountDownLatch(10);  // 结束的倒数锁       
+        final ExecutorService exec = Executors.newFixedThreadPool(10);   // 十名选手
+        for (int index = 0; index < 10; index++) {
+            final int NO = index + 1; 
+            Runnable run = new Runnable() {
+                public void run() { 
+                    try {                        
+                        begin.await();  // 如果当前计数为零，则此方法立即返回，否则等待
+                        Thread.sleep((long) (Math.random() * 10000)); 
+                        System.out.println("No." + NO + " arrived"); 
+                    } catch (InterruptedException e) { 
+                    } finally {                        
+                        end.countDown();       // 每个选手到达终点时，end就减一
+                    } 
+                } 
+            }; 
+            exec.submit(run);
+        } 
+        System.out.println("Game Start"); 
+        // begin减一，开始游戏
+        begin.countDown(); 
+        // 等待end变为0，即所有选手到达终点
+        end.await(); 
+        System.out.println("Game Over"); 
+        exec.shutdown(); 
+    }
+}
+```
+## 障栅：
+CyclicBarrier：允许线程集等待直到其中预定数目的线程到达一个公共障栅，然后可以选择执行一个处理障栅的动作；当大量的线程需要在它们的结果可用之前完成时；障栅是循环的，可以在所有等待线程被释放后被重用，有别于CountDownLatch，只能被使用一次；需要所有的子任务都完成时，才执行主任务，这个时候就可以选择使用CyclicBarrier，在所有参与者都已经在此 barrier 上调用 await方法之前，将一直等待，如果当前线程不是将到达的最后一个线程，出于调度目的，将禁用它  
+```
+public class CyclicBarrierTest {
+         public static void main(String[] args) throws IOException, InterruptedException {
+                  //如果将参数改为4，但是下面只加入了3个选手，这永远等待下去
+                   //Waits until all parties have invoked await on this barrier.
+                   CyclicBarrier barrier = new CyclicBarrier(3);
+                   ExecutorService executor = Executors.newFixedThreadPool(3);
+                   executor.submit(new Thread(new Runner(barrier, "1号选手")));
+                   executor.submit(new Thread(new Runner(barrier, "2号选手")));
+                   executor.submit(new Thread(new Runner(barrier, "3号选手")));
+                   executor.shutdown();
+         }
+}
+class Runner implements Runnable {
+         // 一个同步辅助类，它允许一组线程互相等待，直到到达某个公共屏障点 (common barrier point)
+         private CyclicBarrier barrier;
+         private String name;
+         public Runner(CyclicBarrier barrier, String name) {
+                   super();
+                   this.barrier = barrier;
+                   this.name = name;
+         }
+         @Override
+         public void run() {
+                   try {
+                            Thread.sleep(1000 * (new Random()).nextInt(8));
+                            System.out.println(name + " 准备好了...");
+                            // barrier的await方法，在所有参与者都已经在此 barrier 上调用 await 方法之前，将一直等待
+                            barrier.await();             // 最后一个线程的此函数执行完毕后将唤醒
+                   } catch (InterruptedException e) {
+                            e.printStackTrace();
+                   } catch (BrokenBarrierException e) {
+                            e.printStackTrace();
+                   }
+                   System.out.println(name + " 起跑！");
+         }
+}
+```
+## 交换器：
+Exchange：运行两个线程在要交换的对象准备好时交换两个对象，当两个线程工作在同一数据结构的两个实例上的时候，一个向实例添加数据而另一个从实例清除数据  
+## 同步对列：
+SynchronousQueue：允许一个线程把对象交给另一个线程，在没有显示同步的情况下，当两个线程准备好将一个对象从一个线程传递到另一个时
+一种将生产者和消费者配对的机制，当一个线程调用SynchronousQueue的put方法时，它会阻塞直到另一个线程调用take方法为止，反之亦然，与Exchange不同，数据仅沿着一个方向传递，从生产者到消费者；它不是一个队列，没有任何元素，size方法总是0  
