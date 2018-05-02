@@ -1,27 +1,96 @@
-# java
-java basic.
+## java basic.
 
 `《Java核心技术卷一》笔记`
 
+* [Java关键术语：](#java关键术语)
+* [注释：](#注释)
+* [基本数据类型：](#基本数据类型)
+* [声明与定义：](#声明与定义)
+* [字符串：](#字符串)
+* [块作用域：](#块作用域)
+* [循环：](#循环)
+* [类之间关系：](#类之间关系)
+* [对象：](#对象)
+* [构造器：](#构造器)
+* [私有方法：](#私有方法)
+* [final实例域：](#final实例域)
+* [静态域：](#静态域)
+* [静态方法：](#静态方法)
+* [参数传递：](#参数传递)
+* [方法签名：](#方法签名)
+* [初始化顺序：](#初始化顺序)
+* [构造函数：](#构造函数)
+* [this指针：](#this指针)
+* [super关键字：](#super关键字)
+* [析构器：](#析构器)
+* [包：](#包)
+* [类的定义格式：](#类的定义格式)
+* [每个部分定义顺序：](#每个部分定义顺序)
+* [多重继承：](#多重继承)
+* [动态绑定：](#动态绑定)
+* [强制类型转换：](#强制类型转换)
+* [抽象类：](#抽象类)
+* [protected：](#protected)
+* [Object：](#object)
+* [对象包装器：](#对象包装器)
+* [自动打包：](#自动打包)
+* [自动拆包：](#自动拆包)
+* [字符串转为整型：](#字符串转为整型)
+* [整型转为字符串：](#整型转为字符串)
+* [反射：](#反射)
+* [接口：](#接口)
+* [对象克隆：](#对象克隆)
+* [内部类：](#内部类)
+* [异常分类：](#异常分类)
+* [捕获异常：](#捕获异常)
+* [断言：](#断言)
+* [Java三种处理系统错误的机制：](#java三种处理系统错误的机制)
+* [泛型：](#泛型)
+* [类型变量：](#类型变量)
+* [类型变量限定：](#类型变量限定)
+* [约束与局限性](#约束与局限性)
+* [泛型类型的继承规则：](#泛型类型的继承规则)
+* [通配符类型：](#通配符类型)
+* [通配符限定：](#通配符限定)
+* [集合类：](#集合类)
+* [链表：](#链表)
+* [数组列表：](#数组列表)
+* [散列集：](#散列集)
+* [线程与进程差别：](#线程与进程差别)
+* [线程状态：](#线程状态)
+* [守护线程：](#守护线程)
+* [重入锁：](#重入锁)
+* [条件对象：](#条件对象)
+* [synchronized：](#synchronized)
+* [同步阻塞：](#同步阻塞)
+* [Volatile：](#volatile)
+* [死锁：](#死锁)
+* [读写锁：](#读写锁)
+* [阻塞队列：](#阻塞队列)
+* [高效的散列、集合和队列：](#高效的散列集合和队列)
+* [Callable和Future：](#callable和future)
+* [线程池：](#线程池)
+* [信号量：](#信号量)
+* [倒计时门栓：](#倒计时门栓)
+* [障栅：](#障栅)
+* [交换器：](#交换器)
+* [同步对列：](#同步对列)
 
-  
-    
-      
-      
+
 ## Java关键术语：
 简单性（语法是C++的纯净版本，无头文件、指针、结构、联合、操作符重载、虚基类）、面向对象、网络技能、健壮性、安全性、可移植性、解释性、高性能、多线程
 源代码的文件名必须与公有类的名字相同  
 Java所有的方法必须是某个类的方法，包括main函数  
- 
+
 ## 注释：
 比C++多了文档注释/**   */  
- 
+
 ##  基本数据类型：
 byte（1）、short（2）、int（4）、 long（8）、float（4）、double（8），char（1）、boolean（1），无无符号类型；整型值和布尔型不能相互转换
- 
+
 ## 声明与定义：
 java中不做区分  
- 
+
 ## 字符串：
 ```
 String greeting = “hello”;         // greeting更像是C++里面的指向常量的指针
@@ -34,15 +103,15 @@ StringBuilder builder = new StringBuilder();
 builder.append(ch);
 builder.append(str);
 String completedString = builder.toString();
- 
+
 int compareTo(String other);   // 按字典顺序比较字符串
 boolean equals(Object other); // 比较两个对象的值
 ==  // 比较两个对象的地址
 ```
- 
+
 ## 块作用域：
 C++中可以在块中重定义同名变量，且会覆盖外层变量，Java中不允许这样做  
- 
+
 ## 循环：
 Java中不支持goto，但是可以通过break加标签的形式跳出多层循环；不止循环，标签可用到任何语句中  
 ```
@@ -51,27 +120,27 @@ Label:
          If (condition)
                    break Lable；
 }
- 
+
 for( variable:collection ) statement;
 ```
 collection必须是一个数组或者是实现了Iterable接口的类对象（如ArrayList）
- 
- 
+
+
 ## 类之间关系：
 继承（is-a）、实现（implements）、聚合（has-a）、组合、依赖（uses-a）、关联  
- 
+
 ## 对象：
 Java中的对象变量（或者叫对象引用）与C++中的引用不同，C++中没有空引用，而且引用不能被赋值，它更像是C++中的对象指针
 `Date birthday;  // java`  
 等同于：
 `Data * birthday; // C++`  
- 
+
 ## 构造器：
 与类名相同、每个类可以有多个构造器、可以有任意类型和个数的参数，但是无返回值、在创建对象的时候由系统调用，不能手动调用  
- 
+
 ## 私有方法：
 有时候一个计算代码有若干个辅助方法，这些辅助方法不应该成为共有接口的一部分；或者需要一个特别的调用次序，只有最先调用的接口可设计为公有接口  
- 
+
 ## final实例域：
 final大多应用于基本数据类型或不可变类对象（如果类中的每个方法都不会改变其对象，就是不可变的类）；对于可变类，用final修饰会误导读者  
 ```
@@ -94,28 +163,28 @@ public class System
 ## 静态方法：
 无this指针，只可访问静态域  
 两种常用场景：一个方法无需访问对象状态或只需访问静态域  
- 
+
 static的前世今生：  
 1. 最早用作C里面标识局部变量的存储属性，对比auto
 2. 重用在C里面修饰全局变量和函数，修改其访问属性，对比extern
 3. C++中表示不属于对象而属于整个类的变量和函数
 4. Java中含义与C++完全相同
- 
+
 ## 参数传递：
 值传递；C++除了值传递，还有引用传递；Java中的对象引用类似于C++的对象指针传递  
- 
+
 ## 方法签名：
 返回类型不是方法签名的一部分，即不能有两个同名，参数类型也相同却返回类型不同的方法  
- 
+
 ## 初始化顺序：
 1. 类中域系统会默认初始化，数值为0，布尔false，对象引用null，但是局部变量不会
 2. 按照声明次序执行类中域赋值语句（C++中不能直接初始化实例域，所有的域必须在构造器中初始化，但是有一个初始化列表的语法可以进行设置）和初始化块（静态初始化块早于普通初始化块）
 3. 如果构造器调用了第二个构造器，则执行第二个构造器
 4. 执行这个构造器
- 
+
 ## 构造函数：
 如果类中提供了至少一个构造器，但是没有提供默认的构造器（即无参构造器），则在创建对象时如果没有提供构造参数会被视为不合法（仅当类中没有提供任何构造器的时候，系统才会提高一个默认的构造器）  
- 
+
 ## this指针：
 1. 做隐形参数（同C++）
 2. 用于调用另一个构造器（C++中不允许在一个构造器里调用另一个）
@@ -130,29 +199,29 @@ Public Employee(double s)
 ## super关键字：
 1. 调用超类的方法
 2. 调用超类的构造器（C++则采用作用域标识符：：）
- 
- 
+
+
 ## 析构器：
 Java不支持，但可以为任何类添加finalize方法，在垃圾回收清除对象之前调用，不能依赖他回收任何稀缺的资源，应该由人工管理  
- 
+
 ## 包：
 从编译器的角度看，嵌套的包之间没有任何关系，如java.util和java.util.jar  
 如何没有制定任何访问修饰符，则默认为包作用域，可被包中所有方法访问  
- 
+
 ## 类的定义格式：
-* public部分 
-* 包作用域部分 
+* public部分
+* 包作用域部分
 * private部分
 
 ## 每个部分定义顺序：
-* 实例方法 
-* 静态方法 
-* 实例域 
+* 实例方法
+* 静态方法
+* 实例域
 * 静态域
- 
+
 ## 多重继承：
 Java用extends关键字代替了C++的:；而且跟C++不同，Java中不支持多重继承，而且所有的继承都是public继承  
- 
+
 ## 动态绑定：
 1. Java的默认处理方式，如果希望一个方法不具有虚拟特征，可标记为final；C++默认是静态绑定
 2. 返回类型并不是签名的一部分，在覆盖方法时，一定要保证返回类型的兼容性，子类覆盖方法的返回类型必须与父类一样，或者是其子类型，而且子类方法的可见性不能低于父类，如父类中为public，则子类也必须是public
@@ -160,22 +229,22 @@ Java用extends关键字代替了C++的:；而且跟C++不同，Java中不支持�
 4. final类（其中的方法自动为final，但不包括域）可阻止继承，final方法可阻止覆盖
 
 C++中没有阻止覆盖的方法，但是有阻止继承的技巧  
- 
+
 ## 强制类型转换：
 1. 唯一原因是在暂时忽略了对象的实际类型后可以使用对象的全部功能
 2. 将子类引用赋给父类引用可以，反之必须进行强制类型转换
 3. 只能在继承层次进行类型转换
 4. 将父类转换为子类前，应该使用instanceof进行类型检查
- 
+
 ## 抽象类：
 1. 为了提高程序的清晰度，包含一个或多个抽象方法的类必须声明为抽象的，关键字abstract，C++中无专门的关键字
 2. 抽象类可以包括具体数据和方法
 3. 即使类中不含抽象方法，也可声明为抽象类
 4. 抽象类不能实例化，但是可以创建抽象类的对象变量
- 
+
 ## protected：
 java中其作用域是派生类和整个包，而C++中只有派生类可访问  
- 
+
 ## Object：
 1. 只有基本类型不是对象，所有的数组类型都扩展于Object类；C++没有根基，但是每个指针都可以转换为void *
 ```
@@ -189,14 +258,14 @@ public boolean equals( Object otherobj )
          If ( otherObj == null )       return false;
          If ( getClass() != otherObj.getClass() )    return false;
          Employee other = (Employee)otherObj;
- 
+
          return ( name.equals(other.name) && salary == otherObj.salary && hireDay.equals( OtherObj.hireDay );
- 
+
 }
 ```
 3. hashCode方法必须与equals的定义一致，如果重新定义equals方法，则必须重新定义hashCode方法，每个对象默认的散列码是其存储地址
 4. toString方法用于返回表示对象值的字符串，只要对象与一个字符串通过操作符+连接，就会自动调用该方法，以获取这个对象的字符串描述
- 
+
 ## 对象包装器：
 所有的基本类型都有一个与之对应的类，这些类称为包装器  
 Integer Long Float Double Short Byte Character Void Boolean（前六个派生于Number）,对象包装器是不可变的，还是final，因此不能定义它们的子类，尖括号内的不允许是基本类型  
@@ -212,18 +281,18 @@ ArrayList<Integer>的效率要远低于int[]数组，适合构造小型集合，
 int x = Integer.parseInt(s);
 Integer y = Integer.valueOf(s);
 int z = Integer.valueOf(s).initValue();
-``` 
+```
 ## 整型转为字符串：
 ```
 String s = String.valueOf(i);
 String s = Integer.toString(i);
 String s = "" + i;
-``` 
+```
 修改参数值的方法：使用IntHolder、BooleanHolder等
 
 ## 反射：
 1. 在程序运行期间，Java运行时系统始终为所有的对象维护一个被称为运行时的类型标识，这个信息保存着每个对象所属的类足迹，保存这些信息的类被称为Class
-2. 
+2.
 ```
 a：Employee e;
 Class cl = e.getClass()
@@ -240,7 +309,7 @@ getFields、getMethods、getConstructors`分别返回类提供的public域、方
 `getName`：返回构造器、方法或域的名字  
 `getParametertypes`：构造器和方法参数列表  
 `getRetureType`：方法返回类型  
- 
+
 ## 接口：
 1. 所有方法默认为public（所以实现接口时必须声明为public），所有域默认为public static final
 2. 接口不是类，不能实例化，但是可以声明接口的变量
@@ -295,13 +364,13 @@ new SuperType( construction parameters )
 SuperType可以是接口，也可以是一个类  
 6. 有时候使用内部类只是为了把一个类隐藏在另一个类的内部，并不需要内部类引用外围类对象，可以将内部类定义为static静态内部类，以便取消产生的引用
 7. 定义在接口中的内部类自动为static和public
- 
+
 ## 异常分类：
 Throwable:：Error（系统内部错误和资源耗尽，应终止程序）和Exception  
 Exception：RuntimeException（程序错误导致的，一定是你的问题，如错误的类型转换，数组越界，空指针等）和IOException  
 `Error和RuntimeException`称为未检查异常，其他为已检查异常；程序应该声明所有尽可能的已检查异常，而未检查异常要么不可控（Error），要么就应该避免发生（RuntimeException）  
 Java中，只能抛出Throwable子类的对象，而C++可以抛出任何类型的值
- 
+
 ## 捕获异常：
 如果在try中任何代码抛出一个在catch说明的异常类，那么：  
 1. 程序将跳过try语句块的其余代码
@@ -328,8 +397,8 @@ catch ( IOException e)
 {
          show error dialog
 }
-``` 
- 
+```
+
 ## 断言：
 允许在测试期间向代码插入一些检查语句，当代码发布时，这些语句会被移除  
 ```
@@ -342,23 +411,23 @@ assert condition : expression
 ## Java三种处理系统错误的机制：
 `异常、日志、断言 `
 断言失败是致命的，不可恢复的错误，是在测试阶段调试的战术性工具，日志记录是在程序的整个声明周期都可以使用的策略性工具
- 
+
 ## 泛型：
 使用泛型机制编写的代码要比那些杂乱的使用Object变量，然后再进行强制类型转换的代码具有更好的安全性和可读性  
 Java的泛型类类似于C++的模版类，只是没有专用的template关键字  
- 
+
 ## 类型变量：
 ```
 public static Pair<String> minmax(String[] a)
 {
          if ( a == null || a.length == 0 )  return null;   
-         String min = a[0]; max = a[0]; 
+         String min = a[0]; max = a[0];
          for (int i=0; i<a.length; i++)
          {
                    if ( min.compareTo(a[i]) > 0 ) min = a[i];
                    if ( max.compareTo(a[i]) < 0 ) max = a[i];
          }
-         
+
         return new Pair<String>(min, max);
 }
 ```
@@ -380,7 +449,7 @@ public static <T extends Comparable> T min(T[] a)….
 限定中最多有一个类，可以有多个接口：`T extends Comparable & Serializable`  
 无论何时定义一个泛型类型，都会自动提供一个相应的原始类型，是删去类型参数后的泛型类型名，用第一个限定的类型变量来替换，如果没有限定就用Object替换  
 C++中不能对模版参数的类型加以限制，每个模版实例化产生不同的类型，这一现象称为“模块代码膨胀”，Java中不存在这个问题  
- 
+
 ## 约束与局限性
 1. 不能用类型参数代替基本类型，没有Pair<double>，只有Pair<Double>
 2. 运行时类型查询只适用于原始类型
@@ -388,13 +457,13 @@ C++中不能对模版参数的类型加以限制，每个模版实例化产生�
 4. 参数化类型的数组不合法Pair<String>[] table = new Pair<String>[10]; ERROR
 5. 不能实例化类型变量，不能使用new T(…)，new T[…]或T.clsss；Class类是泛型的，如String.class实际上是一个Class<String>类的对象，事实上也是唯一的对象
 6. 不能在静态域或方法中引用类型变量  
- 
+
 ## 泛型类型的继承规则：
 无论S和T是什么关系，通常，Pair\<S\>与Pair\<T\>没有什么联系  
 ```
 Pair<Manager> managerBuddies = new Pair<Manager>(ceo, cfo);
 Pair<Employee> employeeBuddies = managerBuddies; // illegal;
- 
+
 Manger[] managerBuddies = {ceo, cfo};
 Employee[]employeeBuddies = managerBuddies; // ok
 ```  
@@ -403,11 +472,11 @@ Employee[]employeeBuddies = managerBuddies; // ok
 固定的泛型类型系统使用起来并没有那么令人愉快  
 `Pair< ? extends Employee> `              // Employee是?的上界
 表示任何泛型的Pair类型，其类型参数是Employee的子类，如Pair<Manager>，而不是Pair<String>
- 
+
 ## 通配符限定：
 ```
 Pair<? super Manager>            // Manager是?的下界
- 
+
 public interface Comparable<T>
 {
          public int compareTo(T other);
@@ -417,26 +486,26 @@ public static <T extends Comparable< ? super T>>  T min(T[] a)  // 看起来很�
 
 ## 集合类：
 是带有类型参数的泛型类，不允许有重复的对象  
-``` 
+```
 public interface Collection<E>
 {
          boolean add( E element );        // 集合变化返回true，否则返回false
          Iterator<E> iterator();
-        
+
          int size();
          boolean contains( Object obj );
          boolean equals( Object other );
          boolean remove( Object obj );
 …
 }
- 
+
 public interface Iterator<E>
 {
          E next();
          boolean hasNext();
          void remove();
 }
- 
+
 Collection<String> c = …;
 Iterator<String> iter = c.iterator();
 for ( String element : c )   // foreach可以与任何实现了Iterable接口的对象一起工作
@@ -446,7 +515,7 @@ public interface Iterable<E>
 {
          Iterator<E> iterator();
 }
- 
+
 Collection<String> c = …;
 Iterator<String> iter = c.iterator();
 iter.next();        // skip over the first element
@@ -466,7 +535,7 @@ Iterator iter = staff.iterator();          // Iterator中没有提供add方法
 String first = iter.next();            // visit the first element
 String second = iter.next();      // visit the second element
 iter.remove();           //      remove the second element
- 
+
 interface ListIterator<E> extends Iterator<E>
 {
          void add( E element );      // 与Collection.add不同，它假定总会改变链表
@@ -474,17 +543,17 @@ interface ListIterator<E> extends Iterator<E>
          boolean hasPrevious();
          …
 }
- 
+
 ListIterator<String> iter = staff.listIterator();
 iter.next();        // skip past the first element
 iter.add(“Juliet”)                // Amry->Juliet->Bob->Carl
- 
+
 ListIterator<String> iter = staff.listIterator();
 String old = iter.next();     // return the first element
 iter.set(netValue);            // sets first element
 ```
 若有两个迭代器，一个更改，另一个遍历，则会出错  
- 
+
 不应该使用这种让人误解的随机访问方法来遍历链表：  
 ```
 for (int i=0; i<list.size(); i++)
@@ -496,7 +565,7 @@ for (int i=0; i<list.size(); i++)
 ## 数组列表：
 `ArrayList`：动态增长或缩减的索引序列，封装了一个动态再分配的对象数组；非线程安全  
 `Vector`：所有方法都是同步的，线程同步操作将会耗费大量的时间
- 
+
 ## 散列集：
 Java中的散列集通过链表数组实现  
 `set`：没有重复元素的集合  
@@ -505,10 +574,10 @@ Java中的散列集通过链表数组实现
 Set<String> words = new HashSet<String>();
 words.add(“Hello”);
 words.add(“world!”);
- 
+
 Iterator<String> iter = words.iterator();
 String first = iter.next();
-``` 
+```
 
 `TreeSet`：树集是有序集合  
 ```
@@ -520,13 +589,13 @@ for (String s : sorter)       System.out.println(s);      // 自动排序 Army->
 ```
 
 `Linked 改快读慢；Array 读快改慢；Hash 两都之间`
- 
+
 `Collection是集合接口`  
     |————`Set子接口`：无序，不允许重复  
     |————`List子接口`：有序，可以有重复元素  
     `Set`：检索元素效率低下，删除和插入效率高，插入和删除不会引起元素位置改变  
     `List`：和数组类似，List可以动态增长，查找元素效率高，插入删除元素效率低，因为会引起其他元素位置改变  
-    
+
 `Set和List具体子类`  
     `Set`  
      |————`HashSet`：以哈希表的形式存放元素，插入删除速度很快  
@@ -535,7 +604,7 @@ for (String s : sorter)       System.out.println(s);      // 自动排序 Army->
      |————`ArrayList`：动态数组  
      |————`LinkedList`：链表、队列、堆栈  
     `Vector`是一种老的动态数组，是线程同步，效率很低，一般不赞成使用  
- 
+
 `Iterator`：只能正向遍历集合，适用于获取移除元素  
 `ListIerator`：继承Iterator，可以双向列表的遍历，同样支持元素的修改
 
@@ -547,7 +616,7 @@ this should be a table for the difference of above...
 进程和线程的主要差别在于它们是不同的操作系统资源管理方式：进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程  
 进程只能在一个时间干一件事，如果想同时干两件事或多件事，进程就无能为力了，进程在执行的过程中如果阻塞，例如等待输入，整个进程就会挂起，即使进程中有些工作不依赖于输入的数据，也将无法执行  
 因为要并发，发明了进程，又进一步发明了线程；只不过进程和线程的并发层次不同：进程属于在处理器这一层上提供的抽象；线程则属于在进程这个层次上再提供了一层并发的抽象。如果我们进入计算机体系结构里，就会发现，流水线提供的也是一种并发，不过是指令级的并发。这样，流水线、线程、进程就从低到高在三个层次上提供我们所迫切需要的并发；不要调用Thread或者Runnable对象的run方法；直接调用run方法，只会执行同一线程中的任务，而不会启动新线程  
-``` 
+```
 void interrupt();        // 向线程发送中断请求，线程的中断状态被设置为true，如果线程目前被sleep调用阻塞，InterruptedException异常抛出
 static boolean interrupted();   // 测试当前线程（执行此语句的线程）是否被中断，并将线程中断状态重置为false
 boolean isInterrupted();           // 测试当前线程（执行此语句的线程）是否被中断
@@ -571,7 +640,7 @@ Terminated：run方法正常退出或没有捕获的异常终止了run方法而�
 ## 守护线程：
 `thread.SetDaemon();       // 唯一用途是为其他线程提供服务`  
 如果只剩下守护线程，就没必要运行程序了，守护线程应该永远不访问固有资源，如文件数据库，它会在任何时候甚至在一个操作的中间发生中断  
- 
+
 ## 重入锁：
 重入锁（ReentrantLock）是一种递归无阻塞的同步机制，它不是synchronized的简单替代，看起来 ReentrantLock 无论在哪方面都比 synchronized 好；所有 synchronized 能做的，它都能做，它拥有与synchronized 相同的内存和并发性语义，还拥有 synchronized 所没有的特性，在负荷下还拥有更好的性能；一般来说，除非您对 Lock 的某个高级特性有明确的需要，或者有明确的证据（而不是仅仅是怀疑）表明在特定情况下，同步已经成为可伸缩性的瓶颈，否则还是应当继续使用 synchronized；synchronized 仍然有一些优势，比如在使用 synchronized 的时候，不能忘记释放锁；在退出 synchronized 块时，JVM 会为您做这件事。您很容易忘记用 finally 块释放锁，这对程序非常有害，您的程序能够通过测试，但会在实际工作中出现死锁，那时会很难指出原因；另一个原因是当 JVM 用 synchronized 管理锁定请求和释放时，JVM 在生成线程转储时能够包括锁定信息，这些对调试非常有价值，因为它们能标识死锁或者其他异常行为的来源，而Lock 类只是普通的类，JVM 不知道具体哪个线程拥有 Lock对象；在确实需要一些 synchronized 所没有的特性的时候，比如时间锁等候、可中断锁等候、无块结构锁、多个条件变量或者锁投票可以使用重入锁  
 解锁操作必须放在finally内，如果在临界区的代码抛出异常，锁必须被释放；必须留心临界区的代码，不要因为异常的抛出而跳出了临界区这样finally虽然执行，但是对象可能处于一种受损状态  
@@ -598,8 +667,8 @@ private Lock bankLock = new ReentrantLock  // implements the Lock interface
 ```
 if ( bank.getBalance(from) >= amount)
          bank.transfer( from, to, amount )   // thread might be deactivated at this point
- 
- 
+
+
 public void transfer( int from, int to, int amount )
 {
          bankLock.lock();
@@ -609,7 +678,7 @@ public void transfer( int from, int to, int amount )
                             sufficientFunds.await();           // block current thread, unlock() current thread
                    accounts[from] -= amount;
                    accounts[to] += amount;         
- 
+
                    sufficientFunds.signalAll();       // 解除等待线程的阻塞
          }
          finally
@@ -625,7 +694,7 @@ private Condition sufficientFunds = bankLock.newCondition();
 * 锁可以管理试图进入被保护代码段的线程
 * 锁可以拥有一个或多个相关的条件对象
 每个条件对象管理那些已经进入被保护的代码段但是还不能运行的线程  
- 
+
 ## synchronized：
 Java为每个对象提供一个内部锁，如果一个方法用synchronized关键字声明，那么对象的锁将保护整个方法  
 ```
@@ -656,7 +725,7 @@ public synchronized void transfer( int from, int to, int amount )
                             wait();               // 等价于sufficientFunds.await();
                    accounts[from] -= amount;
                    accounts[to] += amount;         
- 
+
                    notifylAll();        // 等价于sufficientFunds.signalAll();
 }
 ```
@@ -664,7 +733,7 @@ public synchronized void transfer( int from, int to, int amount )
 * 内部锁不能设定超时
 * 内部锁仅有单一条件，可能不够
 最好既不用`Lock/Condition`也不用`synchronized`关键字，许多情况下可以用`java.util.concurrent`  
- 
+
 ## 同步阻塞：
 lock对象对创建仅仅用来使用每个Java对象持有的锁  
 ```
@@ -803,28 +872,28 @@ public class CountDownLatchTest {
         final CountDownLatch end = new CountDownLatch(10);  // 结束的倒数锁       
         final ExecutorService exec = Executors.newFixedThreadPool(10);   // 十名选手
         for (int index = 0; index < 10; index++) {
-            final int NO = index + 1; 
+            final int NO = index + 1;
             Runnable run = new Runnable() {
-                public void run() { 
+                public void run() {
                     try {                        
                         begin.await();  // 如果当前计数为零，则此方法立即返回，否则等待
-                        Thread.sleep((long) (Math.random() * 10000)); 
-                        System.out.println("No." + NO + " arrived"); 
-                    } catch (InterruptedException e) { 
+                        Thread.sleep((long) (Math.random() * 10000));
+                        System.out.println("No." + NO + " arrived");
+                    } catch (InterruptedException e) {
                     } finally {                        
                         end.countDown();       // 每个选手到达终点时，end就减一
-                    } 
-                } 
-            }; 
+                    }
+                }
+            };
             exec.submit(run);
-        } 
-        System.out.println("Game Start"); 
+        }
+        System.out.println("Game Start");
         // begin减一，开始游戏
-        begin.countDown(); 
+        begin.countDown();
         // 等待end变为0，即所有选手到达终点
-        end.await(); 
-        System.out.println("Game Over"); 
-        exec.shutdown(); 
+        end.await();
+        System.out.println("Game Over");
+        exec.shutdown();
     }
 }
 ```
